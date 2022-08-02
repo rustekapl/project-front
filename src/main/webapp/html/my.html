@@ -4,11 +4,10 @@
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
     <link href="/css/my.css" rel="stylesheet">
 </head>
-<body>
+<body onload="fillTable()">
 <h1>RPG admin panel</h1>
 <h2>Account list:</h2>
 <table id="table" border="1">
-    <caption>Account list:</caption>
     <thead>
     <tr>
         <th>#</th>
@@ -21,28 +20,27 @@
         <th>Banned</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    </tbody>
+
+    <script>
+        function fillTable(){
+            let url = "/rest/players";
+            $.get(url,function (data){
+                $.each(data,function (i,parameter){
+                    $('<tr>').html("<td>"
+                        +parameter.id+"</td><td>"
+                        +parameter.name+"</td><td>"
+                        +parameter.title+"</td><td>"
+                        +parameter.race+"</td><td>"
+                        +parameter.profession+"</td><td>"
+                        +parameter.level+"</td><td>"
+                        +new Date(parameter.birthday).toLocaleDateString()+"</td><td>"
+                        +parameter.banned+"</td>"
+
+                    ).appendTo("#table");
+                });
+                });
+        }
+    </script>
 
 
 </table>
