@@ -2,21 +2,22 @@
 <head>
     <title>RPG</title>
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
-    <link href="/css/my.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/my.css">
 </head>
 <body onload="fillTable(0)">
-<h1>RPG admin panel</h1>
+<h1>RPG admin panel </h1>
 <h2>Account list:</h2>
 
-<label for="count_1">Count per page:</label>
-<select id="count_1" onchange="fillTable(0)">
+<label for="countPerPage">Count per page:</label>
+<select id="countPerPage" onchange="fillTable(0)">
     <option value="3">3</option>
     <option value="9">9</option>
     <option value="15">15</option>
     <option value="20">20</option>
 </select>
-
-<table id="table" border="1">
+<br>
+<div class="container mtb-3">
+<table id="table"  >
     <thead>
     <tr>
         <th>#</th>
@@ -32,20 +33,22 @@
     </tr>
     </thead>
 </table>
+</div>
+<br>
 
-<div id ="paging_buttons">Pages:</div>
+<div id ="paging_buttons">Pages:&nbsp;</div>
 
 <hr>
 <h2>Create new account:</h2>
-<label for="input_new_name">Name:</label>
+<label for="input_new_name" style="font-size: 18px; margin-right: 61px"> Name:</label>
 <input type="text" id="input_new_name" name="name" required size="12" maxlength="12">
-<br>
+<br><br>
 
-<label for="input_new_title">Title:</label>
+<label for="input_new_title" style="font-size: 18px; margin-right: 71px"> Title:</label>
 <input type="text" id="input_new_title" name="title" required size="30" maxlength="30">
-<br>
+<br><br>
 
-<label for="input_new_race">Race:</label>
+<label for="input_new_race" style="font-size: 18px; margin-right: 70px">Race:</label>
 <select id="input_new_race" name='race'>
     <option value='HUMAN'>HUMAN</option>
     <option value='DWARF'>DWARF</option>
@@ -55,9 +58,9 @@
     <option value='ROLL'>ROLL</option>
     <option value='HOBBIT'>HOBBIT</option>
 </select>
-<br>
+<br><br>
 
-<label for="input_new_profession">Profession</label>
+<label for="input_new_profession" style="font-size: 18px; margin-right: 28px">Profession:</label>
 <select id="input_new_profession" name='profession'>
     <option value='WARRIOR'>WARRIOR</option>
     <option value='ROGUE'>ROGUE</option>
@@ -68,25 +71,26 @@
     <option value='WARLOCK'>WARLOCK</option>
     <option value='DRUID'>DRUID</option>
 </select>
-<br>
+<br><br>
 
-<label for="input_new_level">Level:</label>
+<label for="input_new_level" style="font-size: 18px; margin-right: 62px">Level:</label>
 <input type="number" id="input_new_level" name="level" min="0" max="100">
-<br>
+<br><br>
 
-<label for="input_new_birthday">Birthday:</label>
+<label for="input_new_birthday" style="font-size: 18px; margin-right: 41px">Birthday:</label>
 <input type="date" id="input_new_birthday" name="birthday" min="2000-01-01" max="3000-12-31">
-<br>
+<br><br>
 
-<label for="input_new_banned">Banned:</label>
+<label for="input_new_banned" style="font-size: 18px; margin-right: 50px">Banned:</label>
 <select id="input_new_banned" name='banned'>
-    <option value='true'>true</option>
     <option value='false'>false</option>
+    <option value='true'>true</option>
 </select>
 <br><br>
 
+
 <span>
-    <button type="submit" onclick="createAccount()">Save</button>
+    <button type="submit" onclick="createAccount()"><img src='/img/save.png'></button>
 </span>
 
 
@@ -97,7 +101,7 @@
 
             let url = "/rest/players?";
 
-            let countPerPage = $("#count_1").val();
+            let countPerPage = $("#countPerPage").val();
             if(countPerPage == null){
                 countPerPage = 3;
             }
@@ -111,26 +115,26 @@
 
            $.get(url,function (data){
                 $.each(data,function (i,parameter){
-                    $('<tr>').html("<td>"
+                    $('<tr>').html("<td style='text-align: center'>"
                         + parameter.id+"</td><td>"
                         + parameter.name+"</td><td>"
-                        + parameter.title+"</td><td>"
-                        + parameter.race+"</td><td>"
-                        + parameter.profession+"</td><td>"
-                        + parameter.level+"</td><td>"
-                        + new Date(parameter.birthday).toLocaleDateString()+"</td><td>"
-                        + parameter.banned+"</td><td>"
+                        + parameter.title+"</td><td style='text-align: center'>"
+                        + parameter.race+"</td><td style='text-align: center'>"
+                        + parameter.profession+"</td><td style='text-align: center'>"
+                        + parameter.level+"</td><td style='text-align: center'>"
+                        + new Date(parameter.birthday).toLocaleDateString()+"</td><td style='text-align: center'>"
+                        + parameter.banned+"</td><td style='text-align: center'>"
                         + "<button id='button_edit_" + parameter.id + "' onclick='editAccount(" + parameter.id + ")'>"
-                        + "<img src='/img/edit.png'>"
-                        + "</button>" + "</td><td>"
+                        + "<img src='/img/edit.png' style=\"width: 20px; height: 20px\">"
+                        + "</button>" + "</td><td style='text-align: center'>"
                         + "<button id='button_delete_" +parameter.id + "' onclick='deleteAccount(" + parameter.id + ")'>"
-                        + "<img src='/img/delete.png'>"
+                        + "<img src='/img/delete.png' style=\"width: 20px; height: 20px\">"
                         + "</button>" + "</td>"
                     ).appendTo("#table");
                 });
            });
 
-            let totalCount = getTotalCount();
+            let totalCount = getNumberOfAccount();
 
 
             let pagesCount = Math.ceil(totalCount / countPerPage);
@@ -140,19 +144,19 @@
 
             for (let i=0; i < pagesCount; i++){
                 let button_tag = "<button>" + (i + 1) + "</button>";
-                let btn = $(button_tag)
+                let button = $(button_tag)
                     .attr("id", "paging_button_" + i)
                     .attr("onclick", "fillTable(" + i + ")")
                     .addClass("pgn-bnt-styled");
-                $("#paging_buttons").append(btn);
+                $("#paging_buttons").append(button);
             }
 
             let identifier = "#paging_button_" + page_number;
-            $(identifier).css("color", "red");
+            $(identifier).css("background", "#1e88e5").css("color", "#fff");
 
         }
 
-        function getTotalCount() {
+        function getNumberOfAccount() {
             let url = "/rest/players/count";
             let res = 0;
             $.ajax({
@@ -183,7 +187,7 @@
 
             $(identifier_delete).remove();
 
-            let save_image_tag = "<img src='/img/save.png'>";
+            let save_image_tag = "<img src='/img/save.png' style=\"width: 20px; height: 20px\">";
             $(identifier_edit).html(save_image_tag);
 
             let current_tr_element = $(identifier_edit).parent().parent();
@@ -303,7 +307,7 @@
             let value_birthday = $("#input_new_birthday").val();
             let value_banned = $("#input_new_banned").val();
 
-            let current_page = window.location.href; //url current page
+            //let current_page = window.location.href; //url current page
 
             let url = "/rest/players";
             $.ajax({
