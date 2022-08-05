@@ -85,6 +85,10 @@
 </select>
 <br><br>
 
+<span>
+    <button type="submit" onclick="createAccount()">Save</button>
+</span>
+
 
 <script>
         function fillTable(page_number){
@@ -289,6 +293,46 @@
                }
 
            });
+        }
+        function createAccount(){
+            let value_name = $("#input_new_name").val();
+            let value_title = $("#input_new_title").val();
+            let value_race = $("#input_new_race").val();
+            let value_profession = $("#input_new_profession").val();
+            let value_level = $("#input_new_level").val();
+            let value_birthday = $("#input_new_birthday").val();
+            let value_banned = $("#input_new_banned").val();
+
+            let current_page = window.location.href; //url current page
+
+            let url = "/rest/players";
+            $.ajax({
+               url: url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                async: false,
+                data: JSON.stringify({
+                    "name": value_name,
+                    "title": value_title,
+                    "race": value_race,
+                    "profession": value_profession,
+                    "level": value_level,
+                    "birthday": new Date(value_birthday).getTime(),
+                    "banned": value_banned
+                }),
+                success: function (){
+                    $("#input_new_name").val("");
+                    $("#input_new_title").val("");
+                    $("#select_new_race").val("");
+                    $("#select_new_profession").val("")
+                    $("#select_new_level").val("");
+                    $("#select_new_birthday").val("");
+                    $("#select_new_banned").val("");
+                    fillTable(getCurrentPage(""));
+                }
+            });
+
         }
 
 </script>
