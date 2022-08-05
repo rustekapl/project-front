@@ -1,6 +1,9 @@
 h1 {
     text-align: center;
 }
+body {
+    color: darkslateblue;
+}
 
 .container {
     max-width: 1170px;
